@@ -16,7 +16,7 @@ func main() {
 		treemap = append(treemap, []string{})
 
 		// repeat to expand map rightward...
-		for i := 0; i < 10000; i++ {
+		for i := 0; i < 100; i++ {
 			for _, c := range row {
 				treemap[x] = append(treemap[x], string(c))
 			}
@@ -38,20 +38,14 @@ func sled(x int, y int, treemap [][]string) int {
 	mx := 0
 	my := 0
 	for {
-		if len(treemap) > my {
-			if len(treemap[my]) > mx {
-				if string(treemap[my][mx]) == "#" {
-					trees = trees + 1
-				}
-				mx = mx + x
-				my = my + y
-			} else {
-				return trees
+		if len(treemap) > my && len(treemap[my]) > mx {
+			if string(treemap[my][mx]) == "#" {
+				trees = trees + 1
 			}
+			mx = mx + x
+			my = my + y
 		} else {
 			return trees
 		}
 	}
-
-	return 0
 }

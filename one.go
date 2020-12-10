@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	var n = flag.Int("n", 0, "How many add up to 2020?")
+	var n = flag.Bool("2", false, "Part 2?")
 	flag.Parse()
 
 	input := []int{}
@@ -21,7 +21,7 @@ func main() {
 		input = append(input, i)
 	}
 
-	if *n == 3 {
+	if *n {
 		result := runThree(input)
 		fmt.Println(result)
 	} else {
