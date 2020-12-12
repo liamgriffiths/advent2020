@@ -4,13 +4,12 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
-	"log"
 	"os"
 	"strconv"
 )
 
 func main() {
-	var n = flag.Bool("2", false, "Part 2?")
+	var part2 = flag.Bool("2", false, "")
 	flag.Parse()
 
 	input := []int{}
@@ -21,16 +20,14 @@ func main() {
 		input = append(input, i)
 	}
 
-	if *n {
-		result := runThree(input)
-		fmt.Println(result)
+	if *part2 {
+		fmt.Println(runPart2(input))
 	} else {
-		result := runTwo(input)
-		fmt.Println(result)
+		fmt.Println(runPart1(input))
 	}
 }
 
-func runTwo(input []int) int {
+func runPart1(input []int) int {
 	for _, x := range input {
 		for _, y := range input {
 			if x+y == 2020 {
@@ -39,11 +36,10 @@ func runTwo(input []int) int {
 		}
 	}
 
-	log.Fatal("Didn't work")
 	return 0
 }
 
-func runThree(input []int) int {
+func runPart2(input []int) int {
 	for _, x := range input {
 		for _, y := range input {
 			for _, z := range input {
@@ -54,6 +50,5 @@ func runThree(input []int) int {
 		}
 	}
 
-	log.Fatal("Didn't work")
 	return 0
 }

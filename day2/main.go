@@ -10,10 +10,10 @@ import (
 )
 
 func main() {
-	var part2 = flag.Bool("2", false, "Part 2?")
+	var part2 = flag.Bool("2", false, "")
 	flag.Parse()
 
-	entries := []Entry{}
+	entries := []entry{}
 
 	sc := bufio.NewScanner(os.Stdin)
 	for sc.Scan() {
@@ -39,14 +39,14 @@ func main() {
 	fmt.Println(validCount)
 }
 
-type Entry struct {
+type entry struct {
 	Min      int
 	Max      int
 	Char     string
 	Password string
 }
 
-func (e *Entry) isValidByRange() bool {
+func (e *entry) isValidByRange() bool {
 	count := 0
 	for _, c := range e.Password {
 		if string(c) == e.Char {
@@ -56,7 +56,7 @@ func (e *Entry) isValidByRange() bool {
 	return count >= e.Min && count <= e.Max
 }
 
-func (e *Entry) isValidByPosition() bool {
+func (e *entry) isValidByPosition() bool {
 	x := e.Password[e.Min-1]
 	y := e.Password[e.Max-1]
 
@@ -67,7 +67,7 @@ func (e *Entry) isValidByPosition() bool {
 	}
 }
 
-func parse(line string) *Entry {
+func parse(line string) *entry {
 	re := regexp.MustCompile(`(?P<min>\d+)-(?P<max>\d+) (?P<char>.): (?P<password>.*)`)
 	names := re.SubexpNames()
 	y := re.FindAllStringSubmatch(line, -1)[0]
@@ -80,7 +80,7 @@ func parse(line string) *Entry {
 	min, _ := strconv.Atoi(kv["min"])
 	max, _ := strconv.Atoi(kv["max"])
 
-	return &Entry{
+	return &entry{
 		Min:      min,
 		Max:      max,
 		Char:     kv["char"],
