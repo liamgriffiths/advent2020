@@ -2,12 +2,15 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"os"
 	"regexp"
 	"strconv"
 	"strings"
 )
+
+const target = "shiny gold"
 
 func main() {
 	input := []string{}
@@ -17,20 +20,50 @@ func main() {
 		input = append(input, sc.Text())
 	}
 
+	rules := []rule{}
 	for _, x := range input {
-		fmt.Println(parse(x))
+		rule := parse(x)
+		rules = append(rules, *rule)
 	}
 
+	res := findBagRules(rules, target)
+
+	// lol, kind of a hacky way to get the unique values
+	a := make(map[string]bool)
+	for _, r := range res {
+		k, _ := json.Marshal(r)
+		a[string(k)] = true
+	}
+
+	fmt.Println(len(a))
+}
+
+func findBagRules(rules []rule, color string) []rule {
+	found := []rule{}
+	for _, r := range rules {
+		for _, ch := range r.CanHave {
+			if ch.Color == color {
+				found = append(found, r)
+			}
+		}
+	}
+
+	for _, f := range found {
+		results := findBagRules(rules, f.Color)
+		found = append(found, results...)
+	}
+
+	return found
 }
 
 type rule struct {
-	color   string // containing bag color
-	canHave []canHave
+	Color   string // containing bag color
+	CanHave []canHave
 }
 
 type canHave struct {
-	number int    // max it can have
-	color  string // bag color
+	Number int    // max it can have
+	Color  string // bag color
 }
 
 func parse(input string) *rule {
@@ -62,12 +95,13 @@ func parse(input string) *rule {
 			number, _ := strconv.Atoi(kv["count"])
 			innerColor := strings.Trim(kv["color"], " ")
 
-			canHaves = append(canHaves, canHave{number: number, color: innerColor})
+			ch := canHave{Number: number, Color: innerColor}
+			canHaves = append(canHaves, ch)
 		}
 	}
 
 	return &rule{
-		color:   color,
-		canHave: canHaves,
+		Color:   color,
+		CanHave: canHaves,
 	}
 }
