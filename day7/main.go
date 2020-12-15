@@ -26,6 +26,11 @@ func main() {
 		rules = append(rules, *rule)
 	}
 
+	fmt.Println(part1(rules))
+	fmt.Println(part2(rules))
+}
+
+func part1(rules []rule) int {
 	res := findBagRules(rules, target)
 
 	// lol, kind of a hacky way to get the unique values
@@ -35,7 +40,7 @@ func main() {
 		a[string(k)] = true
 	}
 
-	fmt.Println(len(a))
+	return len(a)
 }
 
 func findBagRules(rules []rule, color string) []rule {
@@ -54,6 +59,22 @@ func findBagRules(rules []rule, color string) []rule {
 	}
 
 	return found
+}
+
+func part2(rules []rule) int {
+	return findBagsInBags(rules, target) - 1
+}
+
+func findBagsInBags(rules []rule, color string) int {
+	result := 1
+	for _, r := range rules {
+		if r.Color == color {
+			for _, s := range r.CanHave {
+				result = result + s.Number*findBagsInBags(rules, s.Color)
+			}
+		}
+	}
+	return result
 }
 
 type rule struct {
