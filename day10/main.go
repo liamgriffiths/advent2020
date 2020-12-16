@@ -17,17 +17,16 @@ func main() {
 		joltage = append(joltage, j)
 	}
 
-	// add the seat plug
-	joltage = append(joltage, 0)
-	sort.Ints(joltage)
-	// add the device
-	joltage = append(joltage, joltage[len(joltage)-1]+3)
-
-	joltages(joltage)
-	// fmt.Println(joltage)
+	part2(joltage)
 }
 
-func joltages(js []int) {
+func part1(js []int) {
+	// add the seat plug
+	js = append(js, 0)
+	sort.Ints(js)
+	// add the device
+	js = append(js, js[len(js)-1]+3)
+
 	out := make(map[int]int)
 
 	for i, n := range js {
@@ -38,4 +37,8 @@ func joltages(js []int) {
 	}
 
 	fmt.Println(out[1] * out[3])
+}
+
+func part2(js []int) {
+	// todo
 }
