@@ -75,40 +75,84 @@ func (i *Instruction) run(s *Ship) {
 			s.X = s.X - i.Value
 		}
 	case Left:
+		switch s.Direction {
+		case East:
+			switch i.Value {
+			case 90:
+				s.Direction = North
+			case 180:
+				s.Direction = West
+			case 270:
+				s.Direction = South
+			}
+		case West:
+			switch i.Value {
+			case 90:
+				s.Direction = South
+			case 180:
+				s.Direction = East
+			case 270:
+				s.Direction = North
+			}
+		case North:
+			switch i.Value {
+			case 90:
+				s.Direction = West
+			case 180:
+				s.Direction = South
+			case 270:
+				s.Direction = East
+			}
+		case South:
+			switch i.Value {
+			case 90:
+				s.Direction = East
+			case 180:
+				s.Direction = North
+			case 270:
+				s.Direction = West
+			}
+		}
 	case Right:
-		deg := deg(s.Direction)
-		s.Direction = direction((deg + i.Value) % 360)
+		switch s.Direction {
+		case East:
+			switch i.Value {
+			case 90:
+				s.Direction = South
+			case 180:
+				s.Direction = West
+			case 270:
+				s.Direction = North
+			}
+		case West:
+			switch i.Value {
+			case 90:
+				s.Direction = North
+			case 180:
+				s.Direction = East
+			case 270:
+				s.Direction = South
+			}
+		case North:
+			switch i.Value {
+			case 90:
+				s.Direction = East
+			case 180:
+				s.Direction = South
+			case 270:
+				s.Direction = West
+			}
+		case South:
+			switch i.Value {
+			case 90:
+				s.Direction = West
+			case 180:
+				s.Direction = North
+			case 270:
+				s.Direction = East
+			}
+		}
 	}
-}
-
-func direction(deg int) string {
-	switch deg {
-	case 0:
-		return East
-	case 90:
-		return South
-	case 180:
-		return West
-	case 270:
-		return North
-	case 360:
-		return East
-	}
-	return East
-}
-
-func deg(d string) int {
-	switch d {
-	case North:
-		return 270
-	case South:
-		return 90
-	case East:
-		return 0
-	case West:
-		return 180
-	}
-	return 0
 }
 
 func parse(s string) Instruction {
